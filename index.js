@@ -25,6 +25,9 @@ class App {
   }
 
   subscribe(fn){
+    if(Array.isArray(fn))
+      this.callback.push(...fn)
+    else
     this.callback.push(fn)
   }
   notify(){
