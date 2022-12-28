@@ -1,44 +1,10 @@
 
-class App {
-  constructor(data){
-    this.data=  this.initProxy(data);
-    this.callback=[];
-  
-  }
-
-  initProxy(data){
-    return new Proxy(data,{
-      set:(target,prop,value) =>{
-        
-        
-                  target[prop] = value;
-                  this.notify();
-                  return true;
-      },
-      get:(target,prop)=>{
-        if (['[object Object]', '[object Array]'].indexOf(Object.prototype.toString.call(target[prop])) > -1) {
-          return  this.initProxy(target[prop]);
-        }
-        return target[prop];
-      }
-    })
-  }
-
-  subscribe(fn){
-    if(Array.isArray(fn))
-      this.callback.push(...fn)
-    else
-    this.callback.push(fn)
-  }
-  notify(){
-    this.callback.forEach(fn => fn())
-  }
-
-}
+import App from './app.js'
 
 const data = {
   message:"hello world",
-  todos:['uno','due']
+  todos:['uno','due'],
+  users:[]
 };
 
 const myApp= new App(data)
@@ -62,8 +28,55 @@ myApp.subscribe(render);
 myApp.data.message="ciao"
 
 myApp.data.todos.push('sposop')
+myApp.subscribe(
+  ()=>{
+    
+    const el = document.getElementById('users').innerHTML=`
+    <ul>
+				${data.users.map(function (u) {
+					return `<li onclick=removeItem(${u.id})>${u.name}</li>`;
+				}).join('')}
+		</ul>
+    `
+  }
+)
+window.removeItem =(id)=>{
+  myApp.data.users=myApp.data.users.filter(u => u.id != id)
+}
+document.querySelector('#load')
+.addEventListener('click',
+()=>{
+  const users= fetch('https://jsonplaceholder.typicode.com/users').then(r => r.json()).then(u => myApp.data.users = u)
+})
 
-/* setInterval(function(){
+/* COUNT APP */
 
-myApp.data.todos.push('dd')
-},2000) */
+
+const appCount = new App({
+  items:[]
+});
+
+const cb=[
+  ()=>document.querySelector('#totale').innerHTML=`${appCount.data.items.reduce((a,{value})=> +a + +value,0)}`,
+  ()=>{
+    document.querySelector('#list').innerHTML=`
+      <ul>
+        ${appCount.data.items.map(i => `
+          <li onclick=removeItemCount(${i.id})>${i.value}</li>
+        `).join('')}
+      </ul>
+    `
+  }
+]
+appCount.subscribe(cb)
+
+
+document.querySelector('#input').addEventListener('change',(e)=>{
+  const id = Math.random() * 10
+  appCount.data.items.push({id,value:e.target.value})
+  e.target.value=''
+})
+
+window.removeItemCount =(id)=>{
+  appCount.data.items=appCount.data.items.filter(u => u.id != id)
+}
