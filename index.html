@@ -6,17 +6,43 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
+    <style>
+
+      .loader {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+      }
+      .loader::after {
+        content: '';
+        width: 150px;
+        height: 150px;
+        animation: loading 1s infinite linear;
+        border: 20px solid #404040;
+        border-top-color: green;
+        border-radius: 50%;
+      }
+      @keyframes loading {
+        to {
+          transform: rotate(2turn);
+        }
+      }
+    </style>
   </head>
   <body>
     <div style="text-align: center">
       <input type="number" placeholder="Enter a number" id="input" />
 
       <div id="list"></div>
-      <p >totale:<span id="totale"></span></p>
+      <p>totale:<span id="totale"></span></p>
     </div>
 
     <div id="app"></div>
     <div id="todo"></div>
+    <div id="container-loader" style="display: none;">
+      <div class="loader"></div>
+    </div>
     <div id="users"></div>
 
     <button id="load">load</button>

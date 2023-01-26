@@ -23,6 +23,14 @@ window.removeItem =(id)=>{
 }
 document.querySelector('#load')
 .addEventListener('click',
-()=>{
-  const users= fetch('https://jsonplaceholder.typicode.com/users').then(r => r.json()).then(u => myApp.data.users = u)
+    () =>
+    {
+      const loader = document.querySelector('#container-loader')
+        loader.style.display = 'block'
+      const users = fetch('https://jsonplaceholder.typicode.com/users')
+        .then(r => r.json())
+        .then(u => myApp.data.users = u)
+        .finally(() => {
+          loader.style.display = 'none'
+        });
 })

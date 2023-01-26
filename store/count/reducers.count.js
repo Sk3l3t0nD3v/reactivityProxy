@@ -20,6 +20,16 @@ const reducers = [
       </ul>
     `;
   },
+  () =>
+  {
+    const el = document.querySelector('#totale');
+    const totale =initialState.data.items.reduce(
+      (a, { value }) => +a + +value,
+      0
+    );
+    el.style.color = totale > 1000 ? 'red' : 'black';
+
+  },
 ];
 
 const useState = (state) => (initialState = state);
