@@ -1,4 +1,4 @@
-import SkelX from './app.js';
+import SkelX from '../app.js';
 import userState from './reducers.user.js';
 
 const data = {

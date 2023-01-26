@@ -1,4 +1,4 @@
-import SkelX from './app.js';
+import SkelX from '../app.js';
 import countState from './reducers.count.js';
 
 
