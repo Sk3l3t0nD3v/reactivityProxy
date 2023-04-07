@@ -1,6 +1,9 @@
 import SkelX from '../app.js';
 import userState from './reducers.user.js';
 
+//? se il nome della proprietà dell'oggetto coincide con il nome del reducer
+//? quando il valore cambia viene chiamato solo il reducer con lo stesso nome
+
 const data = {
   message:"hello world",
   todos:['uno','due'],

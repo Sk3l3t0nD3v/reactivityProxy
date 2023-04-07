@@ -2,16 +2,17 @@ export default class App {
   constructor(data){
     this.data=  this.initProxy(data);
     this.callback=[];
-  
+
   }
 
   initProxy(data){
     return new Proxy(data,{
       set:(target,prop,value) =>{
-        
-        
-                  target[prop] = value;
-                  this.notify();
+
+
+          target[prop] = value;
+
+                  this.notify(prop);
                   return true;
       },
       get:(target,prop)=>{
@@ -28,9 +29,15 @@ export default class App {
       this.callback.push(...fn)
     else
     this.callback.push(fn)
-  } 
-  notify(){
-    this.callback.forEach(fn => fn())
+  }
+  notify(prop){
+
+     if (this.callback.filter(fn => fn.name == prop).length)
+     {
+        this.callback.filter(fn => fn.name == prop).forEach(fn => fn());
+     }
+     else
+        this.callback.forEach(fn => fn())
   }
 
 }
